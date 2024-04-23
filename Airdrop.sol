@@ -35,8 +35,4 @@ contract Airdrop {
         token.transfer(admin, token.balanceOf(address(this)));
     }
 
-    // In case the contract receives ether accidentally
-    receive() external payable {
-        revert("Contract does not accept Ether");
-    }
 }
