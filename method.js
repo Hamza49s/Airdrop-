@@ -1,12 +1,12 @@
 
 // const contractABI = require("./utils/airdropABI.json");
 const Web3 = require('web3');
-const provider = new Web3.providers.HttpProvider('https://eth-sepolia.g.alchemy.com/v2/Jj_luMlU_qU-AE5UHvF9pngQFbw6s8wm');
+const provider = new Web3.providers.HttpProvider('');
 
 const web3 = new Web3(provider);
 
 const contractABI = [ [{"inputs":[{"internalType":"address","name":"_tokenAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"admin","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"recipients","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"}],"name":"drop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"token","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]];
-const contractAddress = '0x55aC31eDDbFd481a7b3EF7703344dB1e9d433521'; 
+const contractAddress = ''; 
 
 const airdropContract = new web3.eth.Contract(contractABI, contractAddress);
 
