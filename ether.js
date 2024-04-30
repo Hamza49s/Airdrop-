@@ -1,51 +1,53 @@
 const { ethers } = require("ethers");
-const airdropABI = require("./airdropABI.json"); // Import the ABI
+const airdropABI = require("./utils/airdropABI.json");
 
-// Provider setup
-const provider = new ethers.providers.JsonRpcProvider('https://eth-sepolia.g.alchemy.com/v2/Jj_luMlU_qU-AE5UHvF9pngQFbw6s8wm');
+async function main() {
+    // Provider setup
+    const provider = new ethers.providers.JsonRpcProvider('');
 
-// Contract setup
-const contractABI = airdropABI; // Use the imported ABI
-const contractAddress = 'c359eec1563db748a9681cfbd2ba2408b28188f52d2cab9f23b688ebf688e47a';
-const signer = provider.getSigner();
-const airdropContract = new ethers.Contract(contractAddress, contractABI, signer);
+    // Get a signer
+    const signer = new ethers.Wallet('', provider);
 
-// Read Methods
-async function getAdmin() {
-    return await airdropContract.admin();
-}
+    // Contract setup
+    const contractABI = airdropABI;
+    const contractAddress = '';
+    const airdropContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-async function getTokenAddress() {
-    return await airdropContract.token();
-}
-
-async function getContractBalance() {
-    const balance = await provider.getBalance(contractAddress);
-    return ethers.utils.formatEther(balance);
-}
-
-// Write Methods
-async function performAirdrop(recipients, amounts) {
-    const admin = await getAdmin();
-    const currentSigner = await signer.getAddress();
-    if (currentSigner != admin) {
-        console.error("Only admin can perform airdrop");
-        return;
+    // Read Methods
+    async function getAdmin() {
+        return await airdropContract.admin();
     }
-    await airdropContract.drop(recipients, amounts);
-}
 
-async function withdrawTokens() {
-    const admin = await getAdmin();
-    const currentSigner = await signer.getAddress();
-    if (currentSigner != admin) {
-        console.error("Only admin can withdraw tokens");
-        return;
+    async function getTokenAddress() {
+        return await airdropContract.token();
     }
-    await airdropContract.withdrawTokens();
-}
 
-async function main(){
+    async function getContractBalance() {
+        const balance = await provider.getBalance(contractAddress);
+        return ethers.utils.formatEther(balance);
+    }
+
+    // Write Methods
+    async function performAirdrop(recipients, amounts) {
+        const admin = await getAdmin();
+        const currentSigner = await signer.getAddress();
+        if (currentSigner != admin) {
+            console.error("Only admin can perform airdrop");
+            return;
+        }
+        await airdropContract.drop(recipients, amounts);
+    }
+
+    async function withdrawTokens() {
+        const admin = await getAdmin();
+        const currentSigner = await signer.getAddress();
+        if (currentSigner != admin) {
+            console.error("Only admin can withdraw tokens");
+            return;
+        }
+        await airdropContract.withdrawTokens();
+    }
+
     const res = await getAdmin();
     console.log("Admin: ", res);
 
@@ -56,4 +58,6 @@ async function main(){
     console.log("Contract Balance: ", balance);
 }
 
-main();
+main().catch(error => {
+    console.error("Error:", error);
+});
